@@ -1,10 +1,11 @@
 import { useState } from "react"
-import { motion } from "framer-motion"
+import { motion, useReducedMotion } from "framer-motion"
 import { FaHeadset } from "react-icons/fa"
 import { FiUser, FiMail, FiPhone, FiMessageCircle, FiSend } from "react-icons/fi"
 
 export default function Contact({ theme = "dark" }) {
   const isDark = theme === "dark"
+  const reduceMotion = useReducedMotion()
 
   const cardClass = isDark
     ? "bg-[#0b0b0d] border border-white/10 text-white"
@@ -16,7 +17,6 @@ export default function Contact({ theme = "dark" }) {
 
   const [status, setStatus] = useState({ type: "idle", msg: "" })
 
-  // ✅ Your Formspree endpoint
   const FORMSPREE_ENDPOINT = "https://formspree.io/f/xjgyvonp"
 
   async function handleSubmit(e) {
@@ -35,12 +35,12 @@ export default function Contact({ theme = "dark" }) {
 
       if (res.ok) {
         form.reset()
-        setStatus({ type: "success", msg: "✅ Message sent successfully!" })
+        setStatus({ type: "success", msg: "Message sent." })
       } else {
-        setStatus({ type: "error", msg: "❌ Failed to send. Try again." })
+        setStatus({ type: "error", msg: "Failed to send. Try again." })
       }
     } catch (err) {
-      setStatus({ type: "error", msg: "❌ Network error. Try again." })
+      setStatus({ type: "error", msg: "Network error. Try again." })
     }
   }
 
@@ -52,18 +52,18 @@ export default function Contact({ theme = "dark" }) {
         isDark ? "bg-[#0C1014] text-white" : "bg-white text-black",
       ].join(" ")}
     >
-      {/* glow */}
-      <div className="pointer-events-none absolute inset-0 -z-10">
+      {/* ✅ glow (DESKTOP ONLY for ultra smooth mobile) */}
+      <div className="pointer-events-none absolute inset-0 -z-10 hidden sm:block">
         <div className="absolute left-1/2 top-10 -translate-x-1/2 h-[260px] sm:h-[300px] w-[520px] sm:w-[600px] rounded-full bg-purple-600/20 blur-[140px]" />
       </div>
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6">
         {/* Title */}
         <motion.div
-          initial={{ opacity: 0, y: 18 }}
+          initial={reduceMotion ? false : { opacity: 0, y: 18 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: reduceMotion ? 0.01 : 0.6 }}
           className="text-center mb-10 sm:mb-12"
         >
           <h2 className="text-3xl md:text-4xl font-bold flex items-center justify-center gap-3">
@@ -75,10 +75,10 @@ export default function Contact({ theme = "dark" }) {
 
         {/* Card */}
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
+          initial={reduceMotion ? false : { opacity: 0, y: 22 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: reduceMotion ? 0.01 : 0.55 }}
           className={["rounded-3xl p-6 sm:p-8 md:p-10 shadow-xl", cardClass].join(" ")}
         >
           <form className="space-y-5" onSubmit={handleSubmit}>

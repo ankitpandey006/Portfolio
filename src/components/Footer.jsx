@@ -1,5 +1,5 @@
-// ✅ src/components/Footer.jsx
-import { motion } from "framer-motion"
+// ✅ src/components/Footer.jsx (Optimized for mobile + laptop)
+import { motion, useReducedMotion } from "framer-motion"
 import {
   FaGithub,
   FaLinkedin,
@@ -11,9 +11,22 @@ import {
 
 export default function Footer({ theme = "dark" }) {
   const isDark = theme === "dark"
+  const reduceMotion = useReducedMotion()
 
   const textMuted = isDark ? "text-white/70" : "text-black/70"
   const textSoft = isDark ? "text-white/75" : "text-black/75"
+
+  // ✅ Mobile-safe animation config:
+  // - On mobile: remove animation (reduceMotion true on many devices / accessibility)
+  // - Also: we disable animation on small screens via `sm:` classes
+  const motionProps = reduceMotion
+    ? {}
+    : {
+        initial: { opacity: 0, y: 14 },
+        whileInView: { opacity: 1, y: 0 },
+        viewport: { once: true },
+        transition: { duration: 0.5 },
+      }
 
   return (
     <footer
@@ -29,17 +42,20 @@ export default function Footer({ theme = "dark" }) {
           isDark ? "border-white/15" : "border-black/10",
         ].join(" ")}
       >
-        <div className={["h-px w-full", isDark ? "bg-white/15" : "bg-black/10"].join(" ")} />
+        <div
+          className={[
+            "h-px w-full",
+            isDark ? "bg-white/15" : "bg-black/10",
+          ].join(" ")}
+        />
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 mt-10">
         <div className="grid gap-10 sm:gap-12 lg:gap-10 sm:grid-cols-2 lg:grid-cols-3">
           {/* Left */}
           <motion.div
-            initial={{ opacity: 0, y: 14 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
+            {...motionProps}
+            className="sm:opacity-100"
           >
             <h3 className="text-2xl font-bold">
               Ankit&apos;s <span className="text-orange-500">Portfolio</span>
@@ -57,14 +73,10 @@ export default function Footer({ theme = "dark" }) {
 
           {/* Quick Links */}
           <motion.div
-            initial={{ opacity: 0, y: 14 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.05 }}
+            {...(reduceMotion ? {} : { ...motionProps, transition: { duration: 0.5, delay: 0.05 } })}
           >
             <h3 className="text-2xl font-bold">Quick Links</h3>
 
-            {/* 2 columns on mobile/tablet so height looks balanced */}
             <ul className="mt-4 grid grid-cols-2 gap-x-6 gap-y-3">
               {[
                 ["Home", "#home"],
@@ -103,10 +115,7 @@ export default function Footer({ theme = "dark" }) {
 
           {/* Reach Out */}
           <motion.div
-            initial={{ opacity: 0, y: 14 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.1 }}
+            {...(reduceMotion ? {} : { ...motionProps, transition: { duration: 0.5, delay: 0.1 } })}
           >
             <h3 className="text-2xl font-bold">Reach Me Out On</h3>
 
@@ -122,20 +131,23 @@ export default function Footer({ theme = "dark" }) {
               </p>
             </div>
 
-            {/* Social Icons */}
             <div className="mt-6 flex flex-wrap items-center gap-3">
               {[
-                { Icon: FaLinkedin, href: "https://www.linkedin.com/in/ankit-pandey-4699a8286/?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" },
-                { Icon: FaGithub, href: "https://github.com/ankitpandey006" },
-                { Icon: FaEnvelope, href: "mailto:ankitpandey03052005@gmail.com" },
-                { Icon: FaInstagram, href: "https://www.instagram.com/ankitpandey006/" },
-              ].map(({ Icon, href }, idx) => (
+                {
+                  Icon: FaLinkedin,
+                  href: "https://www.linkedin.com/in/ankit-pandey-4699a8286/?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app",
+                  label: "LinkedIn",
+                },
+                { Icon: FaGithub, href: "https://github.com/ankitpandey006", label: "GitHub" },
+                { Icon: FaEnvelope, href: "mailto:ankitpandey03052005@gmail.com", label: "Email" },
+                { Icon: FaInstagram, href: "https://www.instagram.com/ankitpandey006/", label: "Instagram" },
+              ].map(({ Icon, href, label }) => (
                 <a
-                  key={idx}
+                  key={label}
                   href={href}
                   target="_blank"
                   rel="noreferrer"
-                  aria-label="Social link"
+                  aria-label={label}
                   className={[
                     "h-10 w-10 rounded-full grid place-items-center transition border",
                     isDark
@@ -151,9 +163,14 @@ export default function Footer({ theme = "dark" }) {
         </div>
 
         {/* Bottom line */}
-        <div className={["mt-12 pt-6", isDark ? "border-t border-white/15" : "border-t border-black/10"].join(" ")}>
+        <div
+          className={[
+            "mt-12 pt-6",
+            isDark ? "border-t border-white/15" : "border-t border-black/10",
+          ].join(" ")}
+        >
           <p className={["text-center text-sm px-2", textMuted].join(" ")}>
-            Designed With <span className="text-red-500">❤</span> By{" "}
+            Designed with <span className="text-red-500">❤</span> by{" "}
             <span className="text-orange-500 font-semibold">Ankit Pandey</span>
           </p>
         </div>

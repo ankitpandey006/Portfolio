@@ -1,16 +1,12 @@
 import { useEffect, useMemo, useState } from "react"
-import { motion } from "framer-motion"
-import {
-  FaGithub,
-  FaLinkedin,
-  FaInstagram,
-  FaYoutube,
-  FaTwitter,
-} from "react-icons/fa"
+import { motion, useReducedMotion } from "framer-motion"
+import { FaGithub, FaLinkedin, FaInstagram } from "react-icons/fa"
+
+// ✅ Lazy load particles only when needed
 import Particles from "@tsparticles/react"
 import { loadSlim } from "@tsparticles/slim"
 
-// Simple typing effect
+// Simple typing effect (same)
 function useTypeCycle(words, speed = 55, pause = 900) {
   const [i, setI] = useState(0)
   const [sub, setSub] = useState(0)
@@ -40,6 +36,18 @@ function useTypeCycle(words, speed = 55, pause = 900) {
 
 export default function Hero({ theme = "dark" }) {
   const isDark = theme === "dark"
+  const reduceMotion = useReducedMotion()
+
+  // ✅ Mobile detect + delay particles for smooth first paint
+  const [showParticles, setShowParticles] = useState(false)
+  useEffect(() => {
+    const isMobile = window.matchMedia("(max-width: 768px)").matches
+    if (isMobile || reduceMotion) return
+
+    // show particles after page becomes stable
+    const t = setTimeout(() => setShowParticles(true), 900)
+    return () => clearTimeout(t)
+  }, [reduceMotion])
 
   const typed = useTypeCycle(
     ["Web Development", "UI/UX Design", "Data Analytics", "Competitive Programming"],
@@ -55,23 +63,22 @@ export default function Hero({ theme = "dark" }) {
     const line = isDark ? "#ffffff" : "#111827"
     const dot = isDark ? "#ffffff" : "#111827"
 
-    const isMobile =
-      typeof window !== "undefined" && window.matchMedia("(max-width: 640px)").matches
-
     return {
       background: { color: { value: "transparent" } },
-      fpsLimit: 60,
+      // ✅ lower fps for ultra smooth (still looks great)
+      fpsLimit: 45,
       particles: {
         color: { value: dot },
         links: {
           color: line,
-          distance: isMobile ? 120 : 140,
+          distance: 140,
           enable: true,
-          opacity: isDark ? 0.18 : 0.12,
+          opacity: isDark ? 0.16 : 0.10,
           width: 1,
         },
-        move: { enable: true, speed: 1.2, outModes: { default: "bounce" } },
-        number: { value: isMobile ? 45 : 70, density: { enable: true, area: 900 } },
+        move: { enable: true, speed: 1.0, outModes: { default: "bounce" } },
+        // ✅ fewer particles for performance
+        number: { value: 55, density: { enable: true, area: 1000 } },
         opacity: { value: isDark ? 0.35 : 0.28 },
         shape: { type: "circle" },
         size: { value: { min: 1, max: 3 } },
@@ -88,27 +95,24 @@ export default function Hero({ theme = "dark" }) {
         isDark ? "bg-[#0C1014] text-white" : "bg-white text-black",
       ].join(" ")}
     >
-      {/* Particles background */}
-      <Particles
-        id="tsparticles"
-        init={particlesInit}
-        options={particlesOptions}
-        className="absolute inset-0 -z-10"
-      />
+      {/* ✅ Particles only when allowed */}
+      {showParticles && (
+        <Particles
+          id="tsparticles"
+          init={particlesInit}
+          options={particlesOptions}
+          className="absolute inset-0 -z-10"
+        />
+      )}
 
       <div className="mx-auto max-w-4xl px-4 sm:px-6 pt-24 sm:pt-28 pb-14 sm:pb-16 w-full">
         <motion.div
-          initial={{ opacity: 0, y: 25 }}
+          initial={reduceMotion ? false : { opacity: 0, y: 18 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, ease: "easeOut" }}
+          transition={{ duration: reduceMotion ? 0.01 : 0.7, ease: "easeOut" }}
           className="text-center"
         >
-          <h2
-            className={[
-              "text-xl sm:text-2xl font-semibold",
-              isDark ? "text-white/80" : "text-black/80",
-            ].join(" ")}
-          >
+          <h2 className={["text-xl sm:text-2xl font-semibold", isDark ? "text-white/80" : "text-black/80"].join(" ")}>
             Hi There,
           </h2>
 
@@ -116,47 +120,29 @@ export default function Hero({ theme = "dark" }) {
             I&apos;m <span className="text-orange-500">Ankit Pandey</span>
           </h1>
 
-          <p
-            className={[
-              "mt-4 text-base sm:text-lg break-words",
-              isDark ? "text-white/70" : "text-black/70",
-            ].join(" ")}
-          >
+          <p className={["mt-4 text-base sm:text-lg break-words", isDark ? "text-white/70" : "text-black/70"].join(" ")}>
             I Am Into{" "}
             <span className="font-semibold text-orange-500">{typed}</span>
-            <span
-              className={[
-                "inline-block w-[10px] ml-1",
-                isDark ? "text-white/80" : "text-black/80",
-              ].join(" ")}
-            >
+            <span className={["inline-block w-[10px] ml-1", isDark ? "text-white/80" : "text-black/80"].join(" ")}>
               |
             </span>
           </p>
 
-          {/* Buttons */}
           <div className="mt-7 flex items-center justify-center gap-3 sm:gap-4 flex-wrap">
-            <a
-              href="#about"
-              className="px-6 py-3 rounded-full bg-blue-600 text-white font-semibold hover:opacity-90 transition"
-            >
+            <a href="#about" className="px-6 py-3 rounded-full bg-blue-600 text-white font-semibold hover:opacity-90 transition">
               About
             </a>
-
             <a
               href="#contact"
               className={[
                 "px-6 py-3 rounded-full font-semibold transition",
-                isDark
-                  ? "border border-white/15 text-white hover:border-white/30"
-                  : "border border-black/15 text-black hover:border-black/30",
+                isDark ? "border border-white/15 text-white hover:border-white/30" : "border border-black/15 text-black hover:border-black/30",
               ].join(" ")}
             >
               Contact
             </a>
           </div>
 
-          {/* Social icons */}
           <div className="mt-7 flex items-center justify-center gap-3 flex-wrap">
             {[
               { Icon: FaGithub, href: "https://github.com/ankitpandey006" },
@@ -168,12 +154,9 @@ export default function Hero({ theme = "dark" }) {
                 href={href}
                 target="_blank"
                 rel="noreferrer"
-                aria-label="Social link"
                 className={[
                   "h-9 w-9 rounded-full grid place-items-center transition",
-                  isDark
-                    ? "bg-white/5 border border-white/10 text-white/80 hover:text-orange-500"
-                    : "bg-black/5 border border-black/10 text-black/80 hover:text-orange-500",
+                  isDark ? "bg-white/5 border border-white/10 text-white/80 hover:text-orange-500" : "bg-black/5 border border-black/10 text-black/80 hover:text-orange-500",
                 ].join(" ")}
               >
                 <Icon size={16} />

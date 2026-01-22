@@ -1,4 +1,4 @@
-import { motion } from "framer-motion"
+import { motion, useReducedMotion } from "framer-motion"
 import { FaGraduationCap } from "react-icons/fa"
 
 import bceImg from "../assets/educations/bce.jpg"
@@ -29,6 +29,7 @@ const EDUCATION = [
 
 export default function Education({ theme = "dark" }) {
   const isDark = theme === "dark"
+  const reduceMotion = useReducedMotion()
 
   return (
     <section
@@ -38,8 +39,8 @@ export default function Education({ theme = "dark" }) {
         isDark ? "bg-[#0C1014] text-white" : "bg-white text-black",
       ].join(" ")}
     >
-      {/* Background glow */}
-      <div className="pointer-events-none absolute inset-0 -z-10">
+      {/* ✅ Background glow (DESKTOP ONLY for ultra smooth mobile) */}
+      <div className="pointer-events-none absolute inset-0 -z-10 hidden sm:block">
         <div
           className={[
             "absolute top-[-140px] right-[-140px] h-[520px] w-[720px] rounded-full blur-[140px]",
@@ -57,10 +58,10 @@ export default function Education({ theme = "dark" }) {
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         {/* Title */}
         <motion.div
-          initial={{ opacity: 0, y: 18 }}
+          initial={reduceMotion ? false : { opacity: 0, y: 18 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: reduceMotion ? 0.01 : 0.6 }}
           className="text-center"
         >
           <h2 className="text-3xl md:text-4xl font-bold flex items-center justify-center gap-3">
@@ -82,7 +83,13 @@ export default function Education({ theme = "dark" }) {
         {/* Cards */}
         <div className="mt-10 sm:mt-14 space-y-8 sm:space-y-10">
           {EDUCATION.map((item, index) => (
-            <EducationCard key={item.degree} item={item} index={index} theme={theme} />
+            <EducationCard
+              key={item.degree}
+              item={item}
+              index={index}
+              theme={theme}
+              reduceMotion={reduceMotion}
+            />
           ))}
         </div>
       </div>
@@ -91,28 +98,31 @@ export default function Education({ theme = "dark" }) {
 }
 
 /* ===== CARD COMPONENT ===== */
-function EducationCard({ item, index, theme }) {
+function EducationCard({ item, index, theme, reduceMotion }) {
   const isDark = theme === "dark"
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 26 }}
+      initial={reduceMotion ? false : { opacity: 0, y: 22 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.6, delay: index * 0.05 }}
+      transition={{ duration: reduceMotion ? 0.01 : 0.55, delay: index * 0.04 }}
+      // ✅ hover only matters on desktop; mobile ignores hover anyway
+      whileHover={reduceMotion ? undefined : { y: -4 }}
       className={[
         "rounded-2xl overflow-hidden border",
         isDark ? "border-white/10 bg-white/5" : "border-black/10 bg-black/5",
       ].join(" ")}
     >
       <div className="grid md:grid-cols-[320px_1fr]">
-        {/* Left Image */}
+        {/* Left Image (fixed height prevents layout shift) */}
         <div className="h-[200px] sm:h-[240px] md:h-full">
           <img
             src={item.image}
             alt={item.institute}
             className="h-full w-full object-cover"
             loading="lazy"
+            decoding="async"
           />
         </div>
 

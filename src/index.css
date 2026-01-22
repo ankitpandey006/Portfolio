@@ -1,4 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-html { scroll-behavior: smooth; }
+
+/* Ultra smooth scrolling – desktop only */
+@media (min-width: 768px) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Respect reduced motion (accessibility + performance) */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

@@ -1,4 +1,4 @@
-import { motion } from "framer-motion"
+import { motion, useReducedMotion } from "framer-motion"
 import {
   FaJs,
   FaReact,
@@ -20,6 +20,7 @@ import {
 
 export default function Skills({ theme = "dark" }) {
   const isDark = theme === "dark"
+  const reduceMotion = useReducedMotion()
   const textMuted = isDark ? "text-white/70" : "text-black/70"
 
   return (
@@ -33,10 +34,10 @@ export default function Skills({ theme = "dark" }) {
       <div className="max-w-5xl mx-auto px-4 sm:px-6">
         {/* Heading */}
         <motion.h2
-          initial={{ opacity: 0, y: 20 }}
+          initial={reduceMotion ? false : { opacity: 0, y: 18 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: reduceMotion ? 0.01 : 0.55 }}
           className="text-3xl sm:text-4xl font-bold text-center mb-10 sm:mb-16"
         >
           Tech Stack
@@ -44,7 +45,7 @@ export default function Skills({ theme = "dark" }) {
 
         <div className="space-y-8 sm:space-y-10">
           {/* PROGRAMMING */}
-          <SkillBlock title="PROGRAMMING" isDark={isDark} textMuted={textMuted}>
+          <SkillBlock title="PROGRAMMING" isDark={isDark} textMuted={textMuted} reduceMotion={reduceMotion}>
             <SkillItem icon={FaJs} label="JavaScript" />
             <SkillItem icon={SiCplusplus} label="C / C++ (DSA)" />
             <SkillItem icon={FaPython} label="Python" />
@@ -52,7 +53,7 @@ export default function Skills({ theme = "dark" }) {
           </SkillBlock>
 
           {/* LIBRARIES / FRAMEWORKS */}
-          <SkillBlock title="LIBRARIES / FRAMEWORKS" isDark={isDark} textMuted={textMuted}>
+          <SkillBlock title="LIBRARIES / FRAMEWORKS" isDark={isDark} textMuted={textMuted} reduceMotion={reduceMotion}>
             <SkillItem icon={FaReact} label="React.js" />
             <SkillItem icon={FaNodeJs} label="Node.js" />
             <SkillItem icon={SiExpress} label="Express.js" />
@@ -60,14 +61,14 @@ export default function Skills({ theme = "dark" }) {
           </SkillBlock>
 
           {/* DATA / PYTHON */}
-          <SkillBlock title="PYTHON / DATA" isDark={isDark} textMuted={textMuted}>
+          <SkillBlock title="PYTHON / DATA" isDark={isDark} textMuted={textMuted} reduceMotion={reduceMotion}>
             <SkillItem icon={SiNumpy} label="NumPy" />
             <SkillItem icon={SiPandas} label="Pandas" />
             <SkillItem icon={SiJupyter} label="Jupyter Notebook" />
           </SkillBlock>
 
           {/* TOOLS / PLATFORMS */}
-          <SkillBlock title="TOOLS / PLATFORMS" isDark={isDark} textMuted={textMuted}>
+          <SkillBlock title="TOOLS / PLATFORMS" isDark={isDark} textMuted={textMuted} reduceMotion={reduceMotion}>
             <SkillItem icon={FaGitAlt} label="Git" />
             <SkillItem icon={FaGithub} label="GitHub" />
             <SkillItem icon={FaFigma} label="Figma" />
@@ -81,13 +82,13 @@ export default function Skills({ theme = "dark" }) {
 
 /* ===== Components ===== */
 
-function SkillBlock({ title, children, isDark, textMuted }) {
+function SkillBlock({ title, children, isDark, textMuted, reduceMotion }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 25 }}
+      initial={reduceMotion ? false : { opacity: 0, y: 18 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.6 }}
+      transition={{ duration: reduceMotion ? 0.01 : 0.5 }}
       className={[
         "rounded-2xl border p-6 sm:p-8",
         isDark ? "bg-white/5 border-white/10" : "bg-black/5 border-black/10",

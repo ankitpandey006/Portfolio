@@ -37,66 +37,30 @@ export default function Navbar({ theme = "dark", onToggleTheme }) {
     [active, isDark]
   )
 
-  // Close menu on hash change (when user taps a link)
+  // ✅ Simple & SAFE scroll-based active section
   useEffect(() => {
-    const onHash = () => setOpen(false)
-    window.addEventListener("hashchange", onHash)
-    return () => window.removeEventListener("hashchange", onHash)
-  }, [])
-
-  // Prevent background scroll when mobile menu is open
-  useEffect(() => {
-    document.body.style.overflow = open ? "hidden" : ""
-    return () => {
-      document.body.style.overflow = ""
-    }
-  }, [open])
-
-  // Active section detect (mobile + desktop reliable)
-  useEffect(() => {
-    // Prefer IntersectionObserver for accuracy
-    const ids = SECTIONS.map((s) => s.id)
-    const elements = ids
-      .map((id) => document.getElementById(id))
-      .filter(Boolean)
-
-    if ("IntersectionObserver" in window && elements.length) {
-      const obs = new IntersectionObserver(
-        (entries) => {
-          // pick the most visible intersecting section
-          const visible = entries
-            .filter((e) => e.isIntersecting)
-            .sort((a, b) => (b.intersectionRatio || 0) - (a.intersectionRatio || 0))[0]
-          if (visible?.target?.id) setActive(visible.target.id)
-        },
-        {
-          // header offset feel: mark active when section is near top
-          root: null,
-          rootMargin: "-120px 0px -60% 0px",
-          threshold: [0.1, 0.25, 0.5, 0.75],
-        }
-      )
-
-      elements.forEach((el) => obs.observe(el))
-      return () => obs.disconnect()
-    }
-
-    // Fallback: scroll position method
     const onScroll = () => {
       let current = "home"
       SECTIONS.forEach(({ id }) => {
         const el = document.getElementById(id)
         if (el) {
           const top = el.getBoundingClientRect().top
-          if (top <= 120) current = id
+          if (top <= 140) current = id
         }
       })
       setActive(current)
     }
+
     window.addEventListener("scroll", onScroll, { passive: true })
     onScroll()
     return () => window.removeEventListener("scroll", onScroll)
   }, [])
+
+  // Prevent background scroll when menu open
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : ""
+    return () => (document.body.style.overflow = "")
+  }, [open])
 
   return (
     <header className="fixed top-0 left-0 w-full z-50">
@@ -105,18 +69,15 @@ export default function Navbar({ theme = "dark", onToggleTheme }) {
           className={[
             "flex items-center justify-between rounded-full px-4 py-3",
             isDark
-              ? "bg-black/40 border border-white/10 backdrop-blur"
-              : "bg-white/70 border border-black/10 backdrop-blur",
+              ? "bg-black/70 border border-white/10 lg:backdrop-blur"
+              : "bg-white/80 border border-black/10 lg:backdrop-blur",
           ].join(" ")}
         >
           {/* Logo */}
           <a
             href="#home"
             onClick={() => setOpen(false)}
-            className={[
-              "font-semibold tracking-wide",
-              isDark ? "text-white" : "text-black",
-            ].join(" ")}
+            className="font-semibold tracking-wide"
           >
             Ankit<span className="text-orange-500">.</span>
           </a>
@@ -132,38 +93,6 @@ export default function Navbar({ theme = "dark", onToggleTheme }) {
 
           {/* Right */}
           <div className="flex items-center gap-3">
-            {/* Socials */}
-            <a
-              href="https://github.com/ankitpandey006"
-              target="_blank"
-              rel="noreferrer"
-              aria-label="GitHub"
-              className={[
-                "h-9 w-9 rounded-full grid place-items-center transition",
-                isDark
-                  ? "bg-white/5 border border-white/10 text-white/80 hover:text-orange-500"
-                  : "bg-black/5 border border-black/10 text-black/80 hover:text-orange-500",
-              ].join(" ")}
-            >
-              <FaGithub />
-            </a>
-
-            <a
-              href="www.linkedin.com/in/ankitpandey006"
-              target="_blank"
-              rel="noreferrer"
-              aria-label="LinkedIn"
-              className={[
-                "h-9 w-9 rounded-full grid place-items-center transition",
-                isDark
-                  ? "bg-white/5 border border-white/10 text-white/80 hover:text-orange-500"
-                  : "bg-black/5 border border-black/10 text-black/80 hover:text-orange-500",
-              ].join(" ")}
-            >
-              <FaLinkedin />
-            </a>
-
-            {/* Theme Toggle */}
             <button
               onClick={onToggleTheme}
               aria-label="Toggle theme"
@@ -186,15 +115,10 @@ export default function Navbar({ theme = "dark", onToggleTheme }) {
               </span>
             </button>
 
-            {/* Mobile menu button */}
             <button
               onClick={() => setOpen((v) => !v)}
-              aria-label={open ? "Close menu" : "Open menu"}
-              aria-expanded={open}
-              className={[
-                "lg:hidden text-xl",
-                isDark ? "text-white" : "text-black",
-              ].join(" ")}
+              aria-label="Menu"
+              className="lg:hidden text-xl"
             >
               {open ? <FaTimes /> : <FaBars />}
             </button>
@@ -207,8 +131,8 @@ export default function Navbar({ theme = "dark", onToggleTheme }) {
             className={[
               "mt-4 rounded-2xl p-5 space-y-4 lg:hidden",
               isDark
-                ? "bg-black/80 border border-white/10"
-                : "bg-white/90 border border-black/10",
+                ? "bg-black/90 border border-white/10"
+                : "bg-white/95 border border-black/10",
             ].join(" ")}
           >
             {SECTIONS.map((s) => (
@@ -216,7 +140,7 @@ export default function Navbar({ theme = "dark", onToggleTheme }) {
                 key={s.id}
                 href={`#${s.id}`}
                 onClick={() => setOpen(false)}
-                className={["block", linkClass(s.id)].join(" ")}
+                className={linkClass(s.id)}
               >
                 {s.label}
               </a>

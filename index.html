@@ -2,32 +2,58 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+
+    <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+
+    <!-- Viewport -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>my-portfolio</title>
+
+    <!-- SEO -->
+    <title>Ankit Pandey | Portfolio</title>
+    <meta name="description" content="Ankit Pandey – Web Developer portfolio showcasing projects, skills, experience and contact details." />
+
+    <!-- Prevent theme flash (dark default) -->
+    <script>
+      (function () {
+        try {
+          const t = localStorage.getItem("theme");
+          if (t === "light") document.documentElement.classList.add("light");
+          else document.documentElement.classList.add("dark");
+        } catch {}
+      })();
+    </script>
   </head>
+
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
 
-    <!-- Start of Tawk.to Script (delayed for smooth load) -->
-    <script type="text/javascript">
-      window.addEventListener("load", function () {
-        setTimeout(function () {
-          var Tawk_API = Tawk_API || {},
-            Tawk_LoadStart = new Date();
-          (function () {
-            var s1 = document.createElement("script"),
-              s0 = document.getElementsByTagName("script")[0];
-            s1.async = true;
-            s1.src = "https://embed.tawk.to/69725795fe2b6f197f54cee5/1jfjac8jf";
-            s1.charset = "UTF-8";
-            s1.setAttribute("crossorigin", "*");
-            s0.parentNode.insertBefore(s1, s0);
-          })();
-        }, 2500); // ✅ 2.5s delay (you can make 1500–3000)
+    <!-- ✅ Tawk.to (ULTRA SMOOTH: interaction + fallback delay) -->
+    <script>
+      window.addEventListener("load", () => {
+        let loaded = false;
+
+        function loadTawk() {
+          if (loaded) return;
+          loaded = true;
+
+          var s1 = document.createElement("script");
+          s1.async = true;
+          s1.src = "https://embed.tawk.to/69725795fe2b6f197f54cee5/1jfjac8jf";
+          s1.charset = "UTF-8";
+          s1.setAttribute("crossorigin", "*");
+          document.body.appendChild(s1);
+        }
+
+        /* Load on first interaction (BEST for mobile) */
+        window.addEventListener("touchstart", loadTawk, { once: true });
+        window.addEventListener("mousemove", loadTawk, { once: true });
+        window.addEventListener("scroll", loadTawk, { once: true });
+
+        /* Fallback: auto load after 4s */
+        setTimeout(loadTawk, 4000);
       });
     </script>
-    <!-- End of Tawk.to Script -->
   </body>
 </html>

@@ -1,4 +1,5 @@
-import { motion } from "framer-motion"
+import { useEffect, useRef, useState } from "react"
+import { motion, useReducedMotion } from "framer-motion"
 import { FaEye, FaCertificate, FaFileAlt } from "react-icons/fa"
 
 // ✅ IMPORT PDFs FROM ASSETS
@@ -32,6 +33,7 @@ const CERTS = [
 
 export default function Certification({ theme = "dark" }) {
   const isDark = theme === "dark"
+  const reduceMotion = useReducedMotion()
 
   return (
     <section
@@ -44,10 +46,10 @@ export default function Certification({ theme = "dark" }) {
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         {/* Title */}
         <motion.div
-          initial={{ opacity: 0, y: 18 }}
+          initial={reduceMotion ? false : { opacity: 0, y: 18 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: reduceMotion ? 0.01 : 0.6 }}
           className="text-center mb-10 sm:mb-14"
         >
           <h2 className="text-3xl md:text-4xl font-bold flex items-center justify-center gap-3">
@@ -60,7 +62,13 @@ export default function Certification({ theme = "dark" }) {
         {/* Grid */}
         <div className="grid gap-7 sm:gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {CERTS.map((c, idx) => (
-            <CertCard key={idx} c={c} idx={idx} isDark={isDark} />
+            <CertCard
+              key={idx}
+              c={c}
+              idx={idx}
+              isDark={isDark}
+              reduceMotion={reduceMotion}
+            />
           ))}
         </div>
       </div>
@@ -68,14 +76,44 @@ export default function Certification({ theme = "dark" }) {
   )
 }
 
-function CertCard({ c, idx, isDark }) {
+function CertCard({ c, idx, isDark, reduceMotion }) {
+  // ✅ Render iframe only when card is near viewport (huge perf win)
+  const ref = useRef(null)
+  const [showFrame, setShowFrame] = useState(false)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+
+    const obs = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting) {
+          setShowFrame(true)
+          obs.disconnect()
+        }
+      },
+      { rootMargin: "250px 0px" } // load a bit before visible
+    )
+
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [])
+
+  const motionProps = reduceMotion
+    ? {}
+    : {
+        initial: { opacity: 0, y: 18 },
+        whileInView: { opacity: 1, y: 0 },
+        viewport: { once: true },
+        transition: { duration: 0.5, delay: idx * 0.04 },
+      }
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 22 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.55, delay: idx * 0.05 }}
-      whileHover={{ y: -6 }}
+      ref={ref}
+      {...motionProps}
+      // ✅ hover only on non-touch sizes
+      whileHover={reduceMotion ? undefined : { y: -6 }}
       className={[
         "rounded-2xl border overflow-hidden shadow-lg",
         isDark ? "border-white/10 bg-white/5" : "border-black/10 bg-white",
@@ -83,21 +121,29 @@ function CertCard({ c, idx, isDark }) {
     >
       {/* Preview area */}
       <div className={["h-[200px] sm:h-[220px]", isDark ? "bg-black/50" : "bg-black"].join(" ")}>
-        {/* ✅ Mobile: iframe hidden (better performance) */}
+        {/* ✅ Mobile: iframe hidden */}
         <div className="sm:hidden h-full grid place-items-center text-center px-5">
-          <div className={["rounded-xl border p-4 w-full", isDark ? "border-white/15 bg-white/5" : "border-white/15 bg-white/5"].join(" ")}>
+          <div className="rounded-xl border border-white/15 bg-white/5 p-4 w-full">
             <FaFileAlt className="mx-auto mb-2 text-white/90" />
             <p className="text-white/80 text-sm font-semibold">PDF Preview</p>
             <p className="text-white/60 text-xs mt-1">Tap “View Full PDF”</p>
           </div>
         </div>
 
-        {/* ✅ Tablet/Laptop: iframe preview */}
-        <iframe
-          src={c.link}
-          title={c.title}
-          className="hidden sm:block w-full h-full"
-        />
+        {/* ✅ Tablet/Laptop: iframe preview only when near view */}
+        {showFrame ? (
+          <iframe
+            src={c.link}
+            title={c.title}
+            className="hidden sm:block w-full h-full"
+            loading="lazy"
+          />
+        ) : (
+          // placeholder for desktop while waiting (prevents jank)
+          <div className="hidden sm:grid h-full place-items-center text-white/70 text-sm">
+            Loading preview…
+          </div>
+        )}
       </div>
 
       {/* Content */}
@@ -128,9 +174,7 @@ function CertCard({ c, idx, isDark }) {
             rel="noreferrer"
             className={[
               "inline-flex items-center gap-2 px-5 py-2 rounded-lg font-semibold transition",
-              isDark
-                ? "bg-white text-black hover:opacity-90"
-                : "bg-black text-white hover:opacity-90",
+              isDark ? "bg-white text-black hover:opacity-90" : "bg-black text-white hover:opacity-90",
             ].join(" ")}
           >
             <FaEye /> View Full PDF

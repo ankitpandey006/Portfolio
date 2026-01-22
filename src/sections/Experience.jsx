@@ -1,4 +1,4 @@
-import { motion } from "framer-motion"
+import { motion, useReducedMotion } from "framer-motion"
 import { FaBriefcase } from "react-icons/fa"
 
 const EXPERIENCES = [
@@ -18,6 +18,7 @@ const EXPERIENCES = [
 
 export default function Experience({ theme = "dark" }) {
   const isDark = theme === "dark"
+  const reduceMotion = useReducedMotion()
 
   return (
     <section
@@ -30,10 +31,10 @@ export default function Experience({ theme = "dark" }) {
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         {/* Title */}
         <motion.div
-          initial={{ opacity: 0, y: 18 }}
+          initial={reduceMotion ? false : { opacity: 0, y: 18 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: reduceMotion ? 0.01 : 0.55 }}
           className="text-center mb-12 sm:mb-14"
         >
           <h2 className="text-3xl sm:text-4xl font-bold flex items-center justify-center gap-3">
@@ -55,14 +56,20 @@ export default function Experience({ theme = "dark" }) {
 
           <div className="space-y-12">
             {EXPERIENCES.map((item, idx) => (
-              <TimelineItem key={idx} item={item} idx={idx} theme={theme} />
+              <TimelineItem
+                key={idx}
+                item={item}
+                idx={idx}
+                theme={theme}
+                reduceMotion={reduceMotion}
+              />
             ))}
           </div>
 
-          {/* View All Button */}
+          {/* View All Button (✅ no jump jank) */}
           <div className="flex justify-center mt-14">
             <a
-              href="#"
+              href="#experience"
               className="px-8 py-3 rounded-xl font-semibold shadow-lg bg-indigo-600 text-white hover:opacity-90 transition"
             >
               View All →
@@ -74,16 +81,16 @@ export default function Experience({ theme = "dark" }) {
   )
 }
 
-function TimelineItem({ item, idx, theme }) {
+function TimelineItem({ item, idx, theme, reduceMotion }) {
   const isRight = item.side === "right"
   const isDark = theme === "dark"
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 24 }}
+      initial={reduceMotion ? false : { opacity: 0, y: 18 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.6, delay: idx * 0.05 }}
+      transition={{ duration: reduceMotion ? 0.01 : 0.5, delay: idx * 0.04 }}
       className="relative grid grid-cols-1 md:grid-cols-2 gap-6 items-center"
     >
       {/* LEFT (desktop only) */}
@@ -137,12 +144,7 @@ function Card({ item, theme }) {
         ].join(" ")}
       />
 
-      <div
-        className={[
-          "rounded-xl p-5 sm:p-6 shadow-xl bg-orange-500 text-black",
-          isDark ? "text-black" : "text-black",
-        ].join(" ")}
-      >
+      <div className="rounded-xl p-5 sm:p-6 shadow-xl bg-orange-500 text-black">
         <h3 className="text-xl sm:text-2xl font-extrabold">{item.title}</h3>
         <p className="mt-1 font-semibold opacity-90">{item.company}</p>
         <p className="mt-1 text-sm font-semibold opacity-80">{item.date}</p>
