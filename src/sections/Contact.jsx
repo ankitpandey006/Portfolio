@@ -1,0 +1,111 @@
+import { motion } from "framer-motion"
+import { FaHeadset } from "react-icons/fa"
+import { FiUser, FiMail, FiPhone, FiMessageCircle, FiSend } from "react-icons/fi"
+
+export default function Contact({ theme = "dark" }) {
+  const isDark = theme === "dark"
+
+  const cardClass = isDark
+    ? "bg-[#0b0b0d] border border-white/10 text-white"
+    : "bg-white border border-black/10 text-black"
+
+  const inputBase = isDark
+    ? "bg-white/5 text-white placeholder-white/50 border-white/15 focus:border-purple-400"
+    : "bg-[#eef3ff] text-black placeholder-black/50 border-black/20 focus:border-purple-500"
+
+  return (
+    <section
+      id="contact"
+      className={[
+        "relative py-16 sm:py-20 lg:py-24",
+        isDark ? "bg-[#0C1014] text-white" : "bg-white text-black",
+      ].join(" ")}
+    >
+      {/* glow */}
+      <div className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute left-1/2 top-10 -translate-x-1/2 h-[260px] sm:h-[300px] w-[520px] sm:w-[600px] rounded-full bg-purple-600/20 blur-[140px]" />
+      </div>
+
+      <div className="max-w-4xl mx-auto px-4 sm:px-6">
+        {/* Title */}
+        <motion.div
+          initial={{ opacity: 0, y: 18 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-10 sm:mb-12"
+        >
+          <h2 className="text-3xl md:text-4xl font-bold flex items-center justify-center gap-3">
+            <FaHeadset className={isDark ? "text-white/70" : "text-black/70"} />
+            <span>Get In</span>
+            <span className="text-purple-500">Touch</span>
+          </h2>
+        </motion.div>
+
+        {/* Card */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className={["rounded-3xl p-6 sm:p-8 md:p-10 shadow-xl", cardClass].join(" ")}
+        >
+          <form
+            className="space-y-5"
+            onSubmit={(e) => {
+              e.preventDefault()
+              alert("Message sent (demo)")
+            }}
+          >
+            <Field icon={<FiUser />} placeholder="Name" inputClass={inputBase} />
+            <Field icon={<FiMail />} placeholder="Email" type="email" inputClass={inputBase} />
+            <Field icon={<FiPhone />} placeholder="Phone" type="tel" inputClass={inputBase} />
+
+            {/* Message */}
+            <div className="relative">
+              <span className="absolute left-4 top-4 opacity-70">
+                <FiMessageCircle />
+              </span>
+              <textarea
+                rows={5}
+                placeholder="Message"
+                className={[
+                  "w-full rounded-lg border px-4 py-3 pl-12 outline-none transition resize-none text-base",
+                  inputBase,
+                ].join(" ")}
+              />
+            </div>
+
+            {/* Submit */}
+            <div className="pt-3 flex justify-end">
+              <button
+                type="submit"
+                className="inline-flex items-center justify-center gap-2 px-7 py-3 rounded-xl bg-purple-600 text-white font-semibold hover:opacity-90 transition w-full sm:w-auto"
+              >
+                Submit <FiSend />
+              </button>
+            </div>
+          </form>
+        </motion.div>
+      </div>
+    </section>
+  )
+}
+
+function Field({ icon, placeholder, type = "text", inputClass }) {
+  return (
+    <div className="relative">
+      <span className="absolute left-4 top-1/2 -translate-y-1/2 opacity-70">
+        {icon}
+      </span>
+      <input
+        type={type}
+        placeholder={placeholder}
+        className={[
+          "w-full rounded-lg border px-4 py-3 pl-12 outline-none transition text-base",
+          inputClass,
+        ].join(" ")}
+      />
+    </div>
+  )
+}
