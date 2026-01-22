@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { motion } from "framer-motion"
 import { FaHeadset } from "react-icons/fa"
 import { FiUser, FiMail, FiPhone, FiMessageCircle, FiSend } from "react-icons/fi"
@@ -12,6 +13,36 @@ export default function Contact({ theme = "dark" }) {
   const inputBase = isDark
     ? "bg-white/5 text-white placeholder-white/50 border-white/15 focus:border-purple-400"
     : "bg-[#eef3ff] text-black placeholder-black/50 border-black/20 focus:border-purple-500"
+
+  const [status, setStatus] = useState({ type: "idle", msg: "" })
+
+  // ✅ Your Formspree endpoint
+  const FORMSPREE_ENDPOINT = "https://formspree.io/f/xjgyvonp"
+
+  async function handleSubmit(e) {
+    e.preventDefault()
+    setStatus({ type: "loading", msg: "Sending..." })
+
+    const form = e.currentTarget
+    const formData = new FormData(form)
+
+    try {
+      const res = await fetch(FORMSPREE_ENDPOINT, {
+        method: "POST",
+        body: formData,
+        headers: { Accept: "application/json" },
+      })
+
+      if (res.ok) {
+        form.reset()
+        setStatus({ type: "success", msg: "✅ Message sent successfully!" })
+      } else {
+        setStatus({ type: "error", msg: "❌ Failed to send. Try again." })
+      }
+    } catch (err) {
+      setStatus({ type: "error", msg: "❌ Network error. Try again." })
+    }
+  }
 
   return (
     <section
@@ -50,16 +81,17 @@ export default function Contact({ theme = "dark" }) {
           transition={{ duration: 0.6 }}
           className={["rounded-3xl p-6 sm:p-8 md:p-10 shadow-xl", cardClass].join(" ")}
         >
-          <form
-            className="space-y-5"
-            onSubmit={(e) => {
-              e.preventDefault()
-              alert("Message sent (demo)")
-            }}
-          >
-            <Field icon={<FiUser />} placeholder="Name" inputClass={inputBase} />
-            <Field icon={<FiMail />} placeholder="Email" type="email" inputClass={inputBase} />
-            <Field icon={<FiPhone />} placeholder="Phone" type="tel" inputClass={inputBase} />
+          <form className="space-y-5" onSubmit={handleSubmit}>
+            <Field name="name" icon={<FiUser />} placeholder="Name" inputClass={inputBase} required />
+            <Field
+              name="email"
+              icon={<FiMail />}
+              placeholder="Email"
+              type="email"
+              inputClass={inputBase}
+              required
+            />
+            <Field name="phone" icon={<FiPhone />} placeholder="Phone" type="tel" inputClass={inputBase} />
 
             {/* Message */}
             <div className="relative">
@@ -67,7 +99,9 @@ export default function Contact({ theme = "dark" }) {
                 <FiMessageCircle />
               </span>
               <textarea
+                name="message"
                 rows={5}
+                required
                 placeholder="Message"
                 className={[
                   "w-full rounded-lg border px-4 py-3 pl-12 outline-none transition resize-none text-base",
@@ -76,13 +110,27 @@ export default function Contact({ theme = "dark" }) {
               />
             </div>
 
-            {/* Submit */}
-            <div className="pt-3 flex justify-end">
+            {/* Submit + Status */}
+            <div className="pt-3 flex flex-col sm:flex-row sm:items-center sm:justify-end gap-3">
+              {status.msg && (
+                <p
+                  className={[
+                    "text-sm",
+                    status.type === "success" ? "text-green-400" : "",
+                    status.type === "error" ? "text-red-400" : "",
+                    status.type === "loading" ? (isDark ? "text-white/70" : "text-black/60") : "",
+                  ].join(" ")}
+                >
+                  {status.msg}
+                </p>
+              )}
+
               <button
                 type="submit"
-                className="inline-flex items-center justify-center gap-2 px-7 py-3 rounded-xl bg-purple-600 text-white font-semibold hover:opacity-90 transition w-full sm:w-auto"
+                disabled={status.type === "loading"}
+                className="inline-flex items-center justify-center gap-2 px-7 py-3 rounded-xl bg-purple-600 text-white font-semibold hover:opacity-90 transition w-full sm:w-auto disabled:opacity-60"
               >
-                Submit <FiSend />
+                {status.type === "loading" ? "Sending..." : "Submit"} <FiSend />
               </button>
             </div>
           </form>
@@ -92,7 +140,7 @@ export default function Contact({ theme = "dark" }) {
   )
 }
 
-function Field({ icon, placeholder, type = "text", inputClass }) {
+function Field({ icon, placeholder, type = "text", inputClass, name, required = false }) {
   return (
     <div className="relative">
       <span className="absolute left-4 top-1/2 -translate-y-1/2 opacity-70">
@@ -100,6 +148,8 @@ function Field({ icon, placeholder, type = "text", inputClass }) {
       </span>
       <input
         type={type}
+        name={name}
+        required={required}
         placeholder={placeholder}
         className={[
           "w-full rounded-lg border px-4 py-3 pl-12 outline-none transition text-base",
