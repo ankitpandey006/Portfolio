@@ -1,7 +1,9 @@
 import { useState } from "react"
 import { motion, useReducedMotion } from "framer-motion"
 import { FaUser, FaEnvelope, FaMapMarkerAlt, FaFileAlt } from "react-icons/fa"
-import profile from "../assets/profile.jpg" // ✅ change path if needed
+
+import profile from "../assets/profile.jpg"
+import resumePdf from "../assets/Ankit_Pandey_Resume.pdf" // ✅ Resume PDF import
 
 export default function About({ theme = "dark" }) {
   const isDark = theme === "dark"
@@ -11,7 +13,7 @@ export default function About({ theme = "dark" }) {
   const shapeStroke = isDark ? "border-white/70" : "border-black/60"
   const plusFill = isDark ? "bg-white/80" : "bg-black/70"
 
-  // ✅ lightweight motion props (mobile/reduced motion friendly)
+  // Motion presets (reduced motion friendly)
   const fadeUp = reduceMotion
     ? {}
     : {
@@ -47,7 +49,7 @@ export default function About({ theme = "dark" }) {
         isDark ? "bg-[#0C1014] text-white" : "bg-white text-black",
       ].join(" ")}
     >
-      {/* ✅ Background gradient blob (DESKTOP ONLY for smooth mobile) */}
+      {/* Background gradient blobs (desktop only) */}
       <div className="pointer-events-none absolute inset-0 -z-10 hidden sm:block">
         <div
           className={[
@@ -63,7 +65,7 @@ export default function About({ theme = "dark" }) {
         />
       </div>
 
-      {/* Floating shapes (already desktop-only ✅) */}
+      {/* Floating shapes (desktop only) */}
       <div className="pointer-events-none absolute inset-0 hidden sm:block">
         <Shape stroke={shapeStroke} className="left-[8%] top-[18%] rotate-12" />
         <Shape stroke={shapeStroke} className="left-[18%] bottom-[22%] rotate-45" />
@@ -83,7 +85,7 @@ export default function About({ theme = "dark" }) {
         </motion.div>
 
         <div className="grid gap-10 md:grid-cols-2 items-center">
-          {/* Left Image Card */}
+          {/* Left Image */}
           <motion.div
             {...slideLeft}
             className={[
@@ -91,25 +93,23 @@ export default function About({ theme = "dark" }) {
               isDark ? "border-white/10 bg-white/5" : "border-black/10 bg-black/5",
             ].join(" ")}
           >
-            <div className="relative">
-              {imgOk ? (
-                <img
-                  src={profile}
-                  alt="Profile"
-                  loading="lazy"
-                  decoding="async"
-                  className="w-full h-[320px] sm:h-[380px] lg:h-[430px] object-cover grayscale"
-                  onError={() => setImgOk(false)}
-                />
-              ) : (
-                <div className="h-[320px] sm:h-[380px] lg:h-[430px] grid place-items-center text-center px-6">
-                  <p className={isDark ? "text-white/60" : "text-black/60"}>
-                    Photo missing 🙂 <br />
-                    Add <span className="font-semibold">src/assets/profile.jpg</span>
-                  </p>
-                </div>
-              )}
-            </div>
+            {imgOk ? (
+              <img
+                src={profile}
+                alt="Profile"
+                loading="lazy"
+                decoding="async"
+                className="w-full h-[320px] sm:h-[380px] lg:h-[430px] object-cover grayscale"
+                onError={() => setImgOk(false)}
+              />
+            ) : (
+              <div className="h-[320px] sm:h-[380px] lg:h-[430px] grid place-items-center text-center px-6">
+                <p className={isDark ? "text-white/60" : "text-black/60"}>
+                  Photo missing <br />
+                  Add <span className="font-semibold">src/assets/profile.jpg</span>
+                </p>
+              </div>
+            )}
           </motion.div>
 
           {/* Right Content */}
@@ -125,7 +125,6 @@ export default function About({ theme = "dark" }) {
             <h3 className="text-2xl sm:text-3xl font-bold">
               I&apos;m <span className="text-purple-400">Ankit</span>
             </h3>
-
             <p className="mt-1 font-semibold text-purple-400">Software Developer</p>
 
             <p
@@ -134,29 +133,31 @@ export default function About({ theme = "dark" }) {
                 isDark ? "text-white/70" : "text-black/70",
               ].join(" ")}
             >
-              I am a Software Developer passionate about improving my coding skills & building applications.
-              I enjoy collaboration, challenges, and creating impactful tech solutions. My interests include
-              Web Development, Data Analytics, Competitive Programming, Artificial Intelligence, and modern
-              software technologies. Let’s connect and innovate to shape the future together!
+              I am a Software Developer passionate about improving my coding skills
+              and building applications. I enjoy collaboration, challenges, and
+              creating impactful tech solutions. My interests include Web Development,
+              Data Analytics, Competitive Programming, Artificial Intelligence, and
+              modern software technologies.
             </p>
 
             <div className="mt-6 space-y-3">
-              <p className={["flex gap-3 sm:items-center items-start", isDark ? "text-white/70" : "text-black/70"].join(" ")}>
-                <FaEnvelope className="text-purple-400 mt-1 sm:mt-0 shrink-0" />
-                <span className="font-semibold text-purple-400 shrink-0">Email :</span>
+              <p className={["flex gap-3", isDark ? "text-white/70" : "text-black/70"].join(" ")}>
+                <FaEnvelope className="text-purple-400 mt-1 shrink-0" />
+                <span className="font-semibold text-purple-400">Email:</span>
                 <span className="break-all">ankitpandey03052005@gmail.com</span>
               </p>
 
-              <p className={["flex gap-3 sm:items-center items-start", isDark ? "text-white/70" : "text-black/70"].join(" ")}>
-                <FaMapMarkerAlt className="text-purple-400 mt-1 sm:mt-0 shrink-0" />
-                <span className="font-semibold text-purple-400 shrink-0">Place :</span>
+              <p className={["flex gap-3", isDark ? "text-white/70" : "text-black/70"].join(" ")}>
+                <FaMapMarkerAlt className="text-purple-400 mt-1 shrink-0" />
+                <span className="font-semibold text-purple-400">Place:</span>
                 <span>Patna, Bihar, India</span>
               </p>
             </div>
 
+            {/* Resume Button */}
             <div className="mt-7">
               <a
-                href="/resume.pdf"
+                href={resumePdf}
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold hover:opacity-90 transition"
@@ -166,16 +167,19 @@ export default function About({ theme = "dark" }) {
               </a>
             </div>
 
+            {/* Quote */}
             <div
               className={[
                 "mt-8 rounded-2xl p-5 sm:p-6 border",
                 isDark ? "bg-black/30 border-white/10" : "bg-white/60 border-black/10",
               ].join(" ")}
             >
-              <p className={["italic leading-relaxed text-sm sm:text-base", isDark ? "text-white/70" : "text-black/70"].join(" ")}>
+              <p className={["italic", isDark ? "text-white/70" : "text-black/70"].join(" ")}>
                 “Controlling complexity is the essence of computer programming.”
               </p>
-              <p className="mt-3 text-right text-pink-400 font-semibold">— Brian Kernighan</p>
+              <p className="mt-3 text-right text-pink-400 font-semibold">
+                — Brian Kernighan
+              </p>
             </div>
           </motion.div>
         </div>
@@ -185,7 +189,15 @@ export default function About({ theme = "dark" }) {
 }
 
 function Shape({ className = "", stroke = "border-white/70" }) {
-  return <div className={["absolute h-10 w-10 border-2 rounded-md opacity-80", stroke, className].join(" ")} />
+  return (
+    <div
+      className={[
+        "absolute h-10 w-10 border-2 rounded-md opacity-80",
+        stroke,
+        className,
+      ].join(" ")}
+    />
+  )
 }
 
 function Plus({ className = "", fill = "bg-white/80" }) {
