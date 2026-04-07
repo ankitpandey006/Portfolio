@@ -14,15 +14,17 @@ const EDUCATION = [
     image: bceImg,
   },
   {
-    degree: "Class 12th (Intermediate)",
-    institute: "Bihar Board (BSEB)",
+    degree: "Senior Secondary",
+    institute: "Bihar School Examination Board",
     meta: "2021 - 2023 | Completed",
+    marks: "82.8%",
     image: class12Img,
   },
   {
-    degree: "Class 10th (Matric)",
-    institute: "Bihar Board (BSEB)",
+    degree: "Secondary",
+    institute: "Bihar School Examination Board",
     meta: "2020 - 2021 | Completed",
+    marks: "85.8%",
     image: class10Img,
   },
 ]
@@ -39,7 +41,7 @@ export default function Education({ theme = "dark" }) {
         isDark ? "bg-[#0C1014] text-white" : "bg-white text-black",
       ].join(" ")}
     >
-      {/* ✅ Background glow (DESKTOP ONLY for ultra smooth mobile) */}
+      {/* Background Glow */}
       <div className="pointer-events-none absolute inset-0 -z-10 hidden sm:block">
         <div
           className={[
@@ -107,7 +109,6 @@ function EducationCard({ item, index, theme, reduceMotion }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: reduceMotion ? 0.01 : 0.55, delay: index * 0.04 }}
-      // ✅ hover only matters on desktop; mobile ignores hover anyway
       whileHover={reduceMotion ? undefined : { y: -4 }}
       className={[
         "rounded-2xl overflow-hidden border",
@@ -115,18 +116,17 @@ function EducationCard({ item, index, theme, reduceMotion }) {
       ].join(" ")}
     >
       <div className="grid md:grid-cols-[320px_1fr]">
-        {/* Left Image (fixed height prevents layout shift) */}
+        {/* Image */}
         <div className="h-[200px] sm:h-[240px] md:h-full">
           <img
             src={item.image}
             alt={item.institute}
             className="h-full w-full object-cover"
             loading="lazy"
-            decoding="async"
           />
         </div>
 
-        {/* Right Content */}
+        {/* Content */}
         <div
           className={[
             "p-6 sm:p-8 md:p-10 flex items-center justify-center text-center",
@@ -157,6 +157,18 @@ function EducationCard({ item, index, theme, reduceMotion }) {
             >
               {item.meta}
             </p>
+
+            {/* ✅ Marks */}
+            {item.marks && (
+              <p
+                className={[
+                  "mt-2 text-sm sm:text-base font-semibold",
+                  isDark ? "text-yellow-300" : "text-blue-600",
+                ].join(" ")}
+              >
+                Marks: <span className="text-orange-500">{item.marks}</span>
+              </p>
+            )}
           </div>
         </div>
       </div>

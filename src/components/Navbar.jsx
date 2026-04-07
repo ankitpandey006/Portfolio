@@ -1,7 +1,5 @@
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import {
-  FaGithub,
-  FaLinkedin,
   FaMoon,
   FaSun,
   FaBars,
@@ -23,11 +21,12 @@ export default function Navbar({ theme = "dark", onToggleTheme }) {
   const isDark = theme === "dark"
   const [open, setOpen] = useState(false)
   const [active, setActive] = useState("home")
+  const menuRef = useRef()
 
   const linkClass = useMemo(
     () => (id) =>
       [
-        "transition",
+        "block py-2 text-base transition",
         active === id
           ? "text-orange-500 font-semibold"
           : isDark
@@ -37,7 +36,16 @@ export default function Navbar({ theme = "dark", onToggleTheme }) {
     [active, isDark]
   )
 
-  // ✅ Simple & SAFE scroll-based active section
+  // ✅ Smooth scroll
+  const handleClick = (id) => {
+    setOpen(false)
+    const el = document.getElementById(id)
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth" })
+    }
+  }
+
+  // ✅ Active section tracking
   useEffect(() => {
     const onScroll = () => {
       let current = "home"
@@ -45,7 +53,7 @@ export default function Navbar({ theme = "dark", onToggleTheme }) {
         const el = document.getElementById(id)
         if (el) {
           const top = el.getBoundingClientRect().top
-          if (top <= 140) current = id
+          if (top <= 120) current = id
         }
       })
       setActive(current)
@@ -56,46 +64,60 @@ export default function Navbar({ theme = "dark", onToggleTheme }) {
     return () => window.removeEventListener("scroll", onScroll)
   }, [])
 
-  // Prevent background scroll when menu open
+  // ✅ Prevent background scroll
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : ""
     return () => (document.body.style.overflow = "")
   }, [open])
 
+  // ✅ Close on outside click
+  useEffect(() => {
+    const handleOutside = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setOpen(false)
+      }
+    }
+    if (open) document.addEventListener("mousedown", handleOutside)
+    return () => document.removeEventListener("mousedown", handleOutside)
+  }, [open])
+
   return (
     <header className="fixed top-0 left-0 w-full z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
+      <div className="max-w-7xl mx-auto px-4 py-3">
         <div
           className={[
-            "flex items-center justify-between rounded-full px-4 py-3",
+            "flex items-center justify-between rounded-full px-4 py-3 backdrop-blur",
             isDark
-              ? "bg-black/70 border border-white/10 lg:backdrop-blur"
-              : "bg-white/80 border border-black/10 lg:backdrop-blur",
+              ? "bg-black/70 border border-white/10"
+              : "bg-white/80 border border-black/10",
           ].join(" ")}
         >
           {/* Logo */}
-          <a
-            href="#home"
-            onClick={() => setOpen(false)}
-            className="font-semibold tracking-wide"
+          <button
+            onClick={() => handleClick("home")}
+            className="font-semibold text-lg"
           >
             Ankit<span className="text-orange-500">.</span>
-          </a>
+          </button>
 
-          {/* Desktop Links */}
+          {/* Desktop */}
           <nav className="hidden lg:flex items-center gap-6 text-sm">
             {SECTIONS.map((s) => (
-              <a key={s.id} href={`#${s.id}`} className={linkClass(s.id)}>
+              <button
+                key={s.id}
+                onClick={() => handleClick(s.id)}
+                className={linkClass(s.id)}
+              >
                 {s.label}
-              </a>
+              </button>
             ))}
           </nav>
 
           {/* Right */}
           <div className="flex items-center gap-3">
+            {/* Theme toggle */}
             <button
               onClick={onToggleTheme}
-              aria-label="Toggle theme"
               className={[
                 "h-9 w-16 rounded-full flex items-center px-1 transition",
                 isDark
@@ -115,9 +137,9 @@ export default function Navbar({ theme = "dark", onToggleTheme }) {
               </span>
             </button>
 
+            {/* Menu button */}
             <button
               onClick={() => setOpen((v) => !v)}
-              aria-label="Menu"
               className="lg:hidden text-xl"
             >
               {open ? <FaTimes /> : <FaBars />}
@@ -125,25 +147,25 @@ export default function Navbar({ theme = "dark", onToggleTheme }) {
           </div>
         </div>
 
-        {/* Mobile Menu */}
+        {/* ✅ Mobile Menu */}
         {open && (
           <div
+            ref={menuRef}
             className={[
-              "mt-4 rounded-2xl p-5 space-y-4 lg:hidden",
+              "mt-3 rounded-2xl p-5 space-y-2 animate-fadeIn",
               isDark
-                ? "bg-black/90 border border-white/10"
+                ? "bg-black/95 border border-white/10"
                 : "bg-white/95 border border-black/10",
             ].join(" ")}
           >
             {SECTIONS.map((s) => (
-              <a
+              <button
                 key={s.id}
-                href={`#${s.id}`}
-                onClick={() => setOpen(false)}
+                onClick={() => handleClick(s.id)}
                 className={linkClass(s.id)}
               >
                 {s.label}
-              </a>
+              </button>
             ))}
           </div>
         )}

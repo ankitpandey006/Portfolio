@@ -6,8 +6,18 @@ import { FaEye, FaCertificate, FaFileAlt } from "react-icons/fa"
 import tataPdf from "../assets/certificates/tata-genai.pdf"
 import cyberPdf from "../assets/certificates/cyber-security.pdf"
 import nptelPdf from "../assets/certificates/nptel-soft-skill.pdf"
+import tcsPdf from "../assets/certificates/Ankit_Pandey_5149204.pdf"
+import { title } from "framer-motion/client"
 
 const CERTS = [
+  {
+    title: "TCS iON Career Edge - Young Professional",
+    org: "Tata Consultancy Services",
+    issued: "issued April 2026",
+    credentialId: "272697-30588188-1016",
+    link: tcsPdf
+
+  },
   {
     title: "Tata - GenAI Powered Data Analytics Job Simulation",
     org: "Forage",

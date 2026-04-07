@@ -28,32 +28,6 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
-
-    <!-- ✅ Tawk.to (ULTRA SMOOTH: interaction + fallback delay) -->
-    <script>
-      window.addEventListener("load", () => {
-        let loaded = false;
-
-        function loadTawk() {
-          if (loaded) return;
-          loaded = true;
-
-          var s1 = document.createElement("script");
-          s1.async = true;
-          s1.src = "https://embed.tawk.to/69725795fe2b6f197f54cee5/1jfjac8jf";
-          s1.charset = "UTF-8";
-          s1.setAttribute("crossorigin", "*");
-          document.body.appendChild(s1);
-        }
-
-        /* Load on first interaction (BEST for mobile) */
-        window.addEventListener("touchstart", loadTawk, { once: true });
-        window.addEventListener("mousemove", loadTawk, { once: true });
-        window.addEventListener("scroll", loadTawk, { once: true });
-
-        /* Fallback: auto load after 4s */
-        setTimeout(loadTawk, 4000);
-      });
     </script>
   </body>
 </html>
