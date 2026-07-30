@@ -146,7 +146,7 @@ export default function Footer({ theme = "dark" }) {
                   key={label}
                   href={href}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   aria-label={label}
                   className={[
                     "h-10 w-10 rounded-full grid place-items-center transition border",

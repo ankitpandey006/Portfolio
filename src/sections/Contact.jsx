@@ -39,7 +39,7 @@ export default function Contact({ theme = "dark" }) {
       } else {
         setStatus({ type: "error", msg: "Failed to send. Try again." })
       }
-    } catch (err) {
+    } catch {
       setStatus({ type: "error", msg: "Network error. Try again." })
     }
   }
@@ -141,12 +141,15 @@ export default function Contact({ theme = "dark" }) {
 }
 
 function Field({ icon, placeholder, type = "text", inputClass, name, required = false }) {
+  const id = `field-${name}`
   return (
     <div className="relative">
-      <span className="absolute left-4 top-1/2 -translate-y-1/2 opacity-70">
+      <label htmlFor={id} className="sr-only">{placeholder}</label>
+      <span className="absolute left-4 top-1/2 -translate-y-1/2 opacity-70" aria-hidden="true">
         {icon}
       </span>
       <input
+        id={id}
         type={type}
         name={name}
         required={required}

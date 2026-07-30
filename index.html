@@ -9,18 +9,81 @@
     <!-- Viewport -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- SEO -->
-    <title>Ankit Pandey | Portfolio</title>
-    <meta name="description" content="Ankit Pandey – Web Developer portfolio showcasing projects, skills, experience and contact details." />
+    <!-- SEO Meta -->
+    <title>Ankit Pandey | Software Developer Portfolio</title>
+    <meta
+      name="description"
+      content="Ankit Pandey – Software Developer specializing in Web Development, UI/UX Design, Data Analytics & Competitive Programming. View projects, skills, experience and contact details."
+    />
+    <meta name="keywords" content="Ankit Pandey, portfolio, web developer, React, software developer, Patna, India" />
+    <meta name="author" content="Ankit Pandey" />
+    <link rel="canonical" href="https://ankitpandey006.github.io/" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Ankit Pandey | Software Developer Portfolio" />
+    <meta
+      property="og:description"
+      content="Software Developer passionate about Web Development, Data Analytics, and building impactful applications."
+    />
+    <meta property="og:url" content="https://ankitpandey006.github.io/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_IN" />
+    <!-- TODO: Replace with a real OG image (1200×630px) when available -->
+    <meta property="og:image" content="https://ankitpandey006.github.io/og-image.png" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Ankit Pandey | Software Developer Portfolio" />
+    <meta
+      name="twitter:description"
+      content="Software Developer passionate about Web Development, Data Analytics, and building impactful applications."
+    />
+    <!-- TODO: Replace with a real OG image when available -->
+    <meta name="twitter:image" content="https://ankitpandey006.github.io/og-image.png" />
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Ankit Pandey",
+      "url": "https://ankitpandey006.github.io",
+      "jobTitle": "Software Developer",
+      "email": "ankitpandey03052005@gmail.com",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Patna",
+        "addressRegion": "Bihar",
+        "addressCountry": "India"
+      },
+      "sameAs": [
+        "https://github.com/ankitpandey006",
+        "https://www.linkedin.com/in/ankit-pandey-4699a8286/"
+      ]
+    }
+    </script>
+
+    <!-- Content Security Policy -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://formspree.io; frame-src 'self';"
+    />
 
     <!-- Prevent theme flash (dark default) -->
     <script>
       (function () {
         try {
-          const t = localStorage.getItem("theme");
-          if (t === "light") document.documentElement.classList.add("light");
-          else document.documentElement.classList.add("dark");
-        } catch {}
+          var t = localStorage.getItem("theme");
+          var isDark = t !== "light";
+          // Apply initial background/text colors to match React's dark theme
+          if (isDark) {
+            document.documentElement.style.backgroundColor = "#0C1014";
+            document.documentElement.style.color = "#ffffff";
+          } else {
+            document.documentElement.style.backgroundColor = "#ffffff";
+            document.documentElement.style.color = "#000000";
+          }
+        } catch (e) {}
       })();
     </script>
   </head>
@@ -28,6 +91,5 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
-    </script>
   </body>
 </html>

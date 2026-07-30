@@ -66,13 +66,15 @@ export default function Experience({ theme = "dark" }) {
             ))}
           </div>
 
-          {/* View All Button (✅ no jump jank) */}
+          {/* View All — links to LinkedIn profile for full experience */}
           <div className="flex justify-center mt-14">
             <a
-              href="#experience"
-              className="px-8 py-3 rounded-xl font-semibold shadow-lg bg-indigo-600 text-white hover:opacity-90 transition"
+              href="https://www.linkedin.com/in/ankit-pandey-4699a8286/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-8 py-3 rounded-xl font-semibold shadow-lg bg-indigo-600 text-white hover:opacity-90 transition"
             >
-              View All →
+              View Full Resume →
             </a>
           </div>
         </div>
@@ -130,7 +132,6 @@ function TimelineItem({ item, idx, theme, reduceMotion }) {
 
 function Card({ item, theme }) {
   const isRight = item.side === "right"
-  const isDark = theme === "dark"
 
   return (
     <div className="relative w-full max-w-xl">

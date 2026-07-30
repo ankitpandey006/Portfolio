@@ -1,16 +1,87 @@
-# React + Vite
+# Ankit Pandey — Portfolio Website
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+My personal portfolio website built with **React 19**, **Vite 7**, **Tailwind CSS 3**, and **Framer Motion**.
 
-Currently, two official plugins are available:
+## 🔗 Live Demo
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+👉 [ankitpandey006.github.io](https://ankitpandey006.github.io)
 
-## React Compiler
+## ✨ Features
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+- **Dark / Light theme** — toggleable, persisted to localStorage
+- **8 lazy-loaded sections** — Hero, About, Skills, Education, Work, Experience, Certifications, Contact
+- **Animated particles** — desktop-only particle background via tsparticles
+- **Smooth scroll** navigation with active section tracking
+- **Responsive design** — mobile-first, optimized for all screen sizes
+- **Reduced motion support** — respects `prefers-reduced-motion`
+- **Contact form** — powered by Formspree (no backend needed)
+- **Error boundaries** — graceful failure handling for lazy-loaded sections
+- **SEO optimized** — Open Graph, Twitter Cards, JSON-LD, sitemap, robots.txt
 
-## Expanding the ESLint configuration
+## 🛠 Tech Stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+| Layer | Technology |
+|-------|-----------|
+| Framework | React 19 |
+| Build tool | Vite 7 (SWC) |
+| Styling | Tailwind CSS 3 |
+| Animations | Framer Motion 12 |
+| Particles | @tsparticles/react + slim |
+| Icons | react-icons |
+| Form | Formspree |
+| Deployment | GitHub Pages (Actions) |
+
+## 🚀 Getting Started
+
+```bash
+# Install dependencies
+npm install
+
+# Start dev server
+npm run dev
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
+
+# Lint
+npm run lint
+```
+
+## 📁 Project Structure
+
+```
+my-portfolio/
+  public/               # Static assets (robots.txt, sitemap.xml, favicon)
+  src/
+    App.jsx             # Root component with routing, theme, error boundaries
+    main.jsx            # Entry point
+    index.css           # Tailwind directives + global styles
+    components/
+      Navbar.jsx        # Navigation bar with mobile menu
+      Footer.jsx        # Footer with links + socials
+      ErrorBoundary.jsx # Error boundary for lazy-loaded sections
+    sections/
+      Hero.jsx          # Landing section with typing effect + particles
+      About.jsx         # About me with profile image + resume
+      Skills.jsx        # Tech stack grid
+      Education.jsx     # Education timeline
+      Work.jsx          # Project cards
+      Experience.jsx    # Experience timeline
+      Certification.jsx # Certificate cards with PDF preview
+      Contact.jsx       # Contact form (Formspree)
+    assets/             # Images, PDFs, certificates
+```
+
+## 🌐 Deployment
+
+Deployed via GitHub Actions on every push to `main`. The workflow:
+1. Installs dependencies (`npm ci`)
+2. Builds the project (`npm run build`)
+3. Uploads the `dist/` folder to GitHub Pages
+
+## 📄 License
+
+MIT

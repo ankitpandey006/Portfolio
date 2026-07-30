@@ -7,7 +7,6 @@ import tataPdf from "../assets/certificates/tata-genai.pdf"
 import cyberPdf from "../assets/certificates/cyber-security.pdf"
 import nptelPdf from "../assets/certificates/nptel-soft-skill.pdf"
 import tcsPdf from "../assets/certificates/Ankit_Pandey_5149204.pdf"
-import { title } from "framer-motion/client"
 
 const CERTS = [
   {
@@ -181,7 +180,7 @@ function CertCard({ c, idx, isDark, reduceMotion }) {
           <a
             href={c.link}
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
             className={[
               "inline-flex items-center gap-2 px-5 py-2 rounded-lg font-semibold transition",
               isDark ? "bg-white text-black hover:opacity-90" : "bg-black text-white hover:opacity-90",

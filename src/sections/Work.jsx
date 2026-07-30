@@ -106,7 +106,7 @@ function ProjectCard({ p, idx, theme, reduceMotion }) {
           <a
             href={p.view}
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
             className="px-4 py-2 rounded-lg bg-white text-black font-semibold flex items-center gap-2 hover:opacity-90"
           >
             <FaExternalLinkAlt size={14} /> View
@@ -114,7 +114,7 @@ function ProjectCard({ p, idx, theme, reduceMotion }) {
           <a
             href={p.code}
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
             className="px-4 py-2 rounded-lg bg-orange-500 text-black font-semibold flex items-center gap-2 hover:opacity-90"
           >
             <FaCode size={14} /> Code
@@ -127,7 +127,7 @@ function ProjectCard({ p, idx, theme, reduceMotion }) {
         <a
           href={p.view}
           target="_blank"
-          rel="noreferrer"
+          rel="noopener noreferrer"
           className="px-4 py-2 rounded-lg bg-white text-black font-semibold flex items-center gap-2 active:opacity-80"
         >
           <FaExternalLinkAlt size={14} /> View
@@ -135,7 +135,7 @@ function ProjectCard({ p, idx, theme, reduceMotion }) {
         <a
           href={p.code}
           target="_blank"
-          rel="noreferrer"
+          rel="noopener noreferrer"
           className="px-4 py-2 rounded-lg bg-orange-500 text-black font-semibold flex items-center gap-2 active:opacity-80"
         >
           <FaCode size={14} /> Code

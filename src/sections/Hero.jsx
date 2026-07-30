@@ -158,7 +158,7 @@ export default function Hero({ theme = "dark" }) {
                 key={idx}
                 href={href}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className={`h-10 w-10 rounded-full grid place-items-center transition ${
                   isDark
                     ? "bg-white/5 border border-white/10 text-white/80 hover:text-orange-500"

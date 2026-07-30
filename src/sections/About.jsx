@@ -159,7 +159,7 @@ export default function About({ theme = "dark" }) {
               <a
                 href={resumePdf}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold hover:opacity-90 transition"
               >
                 <FaFileAlt />
