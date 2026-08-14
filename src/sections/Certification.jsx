@@ -148,9 +148,13 @@ function CertCard({ c, idx, isDark, reduceMotion }) {
             loading="lazy"
           />
         ) : (
-          // placeholder for desktop while waiting (prevents jank)
-          <div className="hidden sm:grid h-full place-items-center text-white/70 text-sm">
-            Loading preview…
+          <div className="hidden sm:block h-full w-full">
+            <div className="h-full w-full p-5">
+              <div className={[
+                "h-full w-full rounded-xl border",
+                isDark ? "border-white/10 bg-white/5" : "border-black/10 bg-black/5",
+              ].join(" ")} />
+            </div>
           </div>
         )}
       </div>

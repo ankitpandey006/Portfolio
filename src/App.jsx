@@ -1,7 +1,17 @@
-import { useEffect, useState, Suspense, lazy } from "react"
+import { useEffect, useLayoutEffect, useState, Suspense, lazy } from "react"
 import Navbar from "./components/Navbar"
 import Footer from "./components/Footer"
 import ErrorBoundary from "./components/ErrorBoundary"
+import {
+  HeroSkeleton,
+  AboutSkeleton,
+  SkillsSkeleton,
+  EducationSkeleton,
+  ProjectSkeleton,
+  ExperienceSkeleton,
+  CertificationSkeleton,
+  ContactSkeleton,
+} from "./components/Skeletons"
 
 // Lazy load sections for faster first paint
 const Hero = lazy(() => import("./sections/Hero"))
@@ -21,18 +31,29 @@ function getInitialTheme() {
   } catch {
     // localStorage unavailable
   }
-  return "dark"
+  return "light"
 }
 
 // Defined outside App to prevent remounts on every render (critical for lazy-loaded sections)
-function SectionFallback() {
-  return <div className="py-16 text-center opacity-70">Loading&hellip;</div>
+function SectionFallback({ theme, kind }) {
+  const map = {
+    hero: <HeroSkeleton theme={theme} />,
+    about: <AboutSkeleton theme={theme} />,
+    skills: <SkillsSkeleton theme={theme} />,
+    education: <EducationSkeleton theme={theme} />,
+    work: <ProjectSkeleton theme={theme} />,
+    experience: <ExperienceSkeleton theme={theme} />,
+    certification: <CertificationSkeleton theme={theme} />,
+    contact: <ContactSkeleton theme={theme} />,
+  }
+
+  return map[kind] || null
 }
 
-function Section({ children }) {
+function Section({ children, theme, kind }) {
   return (
     <ErrorBoundary>
-      <Suspense fallback={<SectionFallback />}>{children}</Suspense>
+      <Suspense fallback={<SectionFallback theme={theme} kind={kind} />}>{children}</Suspense>
     </ErrorBoundary>
   )
 }
@@ -41,6 +62,11 @@ export default function App() {
   const [theme, setTheme] = useState(getInitialTheme)
   const isDark = theme === "dark"
 
+  // Apply theme as early as possible to avoid a dark-mode flash on fresh loads
+  useLayoutEffect(() => {
+    document.documentElement.style.colorScheme = isDark ? "dark" : "light"
+  }, [isDark])
+
   // Sync theme to localStorage and document
   useEffect(() => {
     try {
@@ -48,8 +74,7 @@ export default function App() {
     } catch {
       // localStorage unavailable
     }
-    document.documentElement.style.colorScheme = isDark ? "dark" : "light"
-  }, [theme, isDark])
+  }, [theme])
 
   const toggleTheme = () => setTheme((t) => (t === "dark" ? "light" : "dark"))
 
@@ -63,14 +88,14 @@ export default function App() {
     >
       <Navbar theme={theme} onToggleTheme={toggleTheme} />
 
-      <Section><Hero theme={theme} /></Section>
-      <Section><About theme={theme} /></Section>
-      <Section><Skills theme={theme} /></Section>
-      <Section><Education theme={theme} /></Section>
-      <Section><Work theme={theme} /></Section>
-      <Section><Experience theme={theme} /></Section>
-      <Section><Certification theme={theme} /></Section>
-      <Section><Contact theme={theme} /></Section>
+      <Section theme={theme} kind="hero"><Hero theme={theme} /></Section>
+      <Section theme={theme} kind="about"><About theme={theme} /></Section>
+      <Section theme={theme} kind="skills"><Skills theme={theme} /></Section>
+      <Section theme={theme} kind="education"><Education theme={theme} /></Section>
+      <Section theme={theme} kind="work"><Work theme={theme} /></Section>
+      <Section theme={theme} kind="experience"><Experience theme={theme} /></Section>
+      <Section theme={theme} kind="certification"><Certification theme={theme} /></Section>
+      <Section theme={theme} kind="contact"><Contact theme={theme} /></Section>
 
       <Footer theme={theme} />
     </div>
