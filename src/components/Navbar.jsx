@@ -6,18 +6,19 @@ import {
   FaTimes,
 } from "react-icons/fa"
 
-const SECTIONS = [
+const resumePdf = new URL("../assets/Ankit_Pandey_Resume.pdf", import.meta.url).href
+
+// Main navigation — only these items appear in the navbar.
+// Skills, Education, Work Experience and Certifications still live on the
+// page; they are just not part of the main navigation.
+const NAV_ITEMS = [
   { id: "home", label: "Home" },
   { id: "about", label: "About" },
-  { id: "skills", label: "Skills" },
-  { id: "education", label: "Education" },
-  { id: "work", label: "Work" },
-  { id: "experience", label: "Experience" },
-  { id: "certification", label: "Certification" },
+  { id: "work", label: "Projects" },
   { id: "contact", label: "Contact" },
 ]
 
-export default function Navbar({ theme = "dark", onToggleTheme }) {
+export default function Navbar({ theme = "light", onToggleTheme }) {
   const isDark = theme === "dark"
   const [open, setOpen] = useState(false)
   const [active, setActive] = useState("home")
@@ -49,7 +50,7 @@ export default function Navbar({ theme = "dark", onToggleTheme }) {
   useEffect(() => {
     const onScroll = () => {
       let current = "home"
-      SECTIONS.forEach(({ id }) => {
+      NAV_ITEMS.forEach(({ id }) => {
         const el = document.getElementById(id)
         if (el) {
           const top = el.getBoundingClientRect().top
@@ -101,14 +102,30 @@ export default function Navbar({ theme = "dark", onToggleTheme }) {
           </button>
 
           {/* Desktop */}
-          <nav className="hidden lg:flex items-center gap-6 text-sm">
-            {SECTIONS.map((s) => (
+          <nav className="hidden lg:flex items-center gap-7 text-sm">
+            {NAV_ITEMS.map((s) => (
               <button
                 key={s.id}
                 onClick={() => handleClick(s.id)}
-                className={linkClass(s.id)}
+                aria-current={active === s.id ? "page" : undefined}
+                className={[
+                  "relative py-1 transition",
+                  active === s.id
+                    ? "text-orange-500 font-medium"
+                    : isDark
+                    ? "text-white/70 hover:text-white"
+                    : "text-black/70 hover:text-black",
+                ].join(" ")}
               >
                 {s.label}
+                {/* Subtle active indicator */}
+                <span
+                  aria-hidden="true"
+                  className={[
+                    "absolute left-1/2 -translate-x-1/2 bottom-0 h-0.5 w-4 rounded-full bg-orange-500 transition-opacity duration-300",
+                    active === s.id ? "opacity-100" : "opacity-0",
+                  ].join(" ")}
+                />
               </button>
             ))}
           </nav>
@@ -137,7 +154,17 @@ export default function Navbar({ theme = "dark", onToggleTheme }) {
               </span>
             </button>
 
-            {/* Menu button */}
+            {/* Resume CTA (desktop) */}
+            <a
+              href={resumePdf}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden lg:inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white text-sm font-semibold hover:opacity-90 transition"
+            >
+              Resume
+            </a>
+
+            {/* Menu button (mobile) */}
             <button
               onClick={() => setOpen((v) => !v)}
               className="lg:hidden text-xl"
@@ -158,7 +185,7 @@ export default function Navbar({ theme = "dark", onToggleTheme }) {
                 : "bg-white/95 border border-black/10",
             ].join(" ")}
           >
-            {SECTIONS.map((s) => (
+            {NAV_ITEMS.map((s) => (
               <button
                 key={s.id}
                 onClick={() => handleClick(s.id)}
@@ -167,6 +194,15 @@ export default function Navbar({ theme = "dark", onToggleTheme }) {
                 {s.label}
               </button>
             ))}
+            {/* Resume CTA (mobile) */}
+            <a
+              href={resumePdf}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-3 flex items-center justify-center px-4 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold hover:opacity-90 transition"
+            >
+              Resume
+            </a>
           </div>
         )}
       </div>

@@ -36,7 +36,7 @@ function useTypeCycle(words, speed = 55, pause = 900) {
   return word.slice(0, sub)
 }
 
-export default function Hero({ theme = "dark" }) {
+export default function Hero({ theme = "light" }) {
   const isDark = theme === "dark"
   const reduceMotion = useReducedMotion()
 

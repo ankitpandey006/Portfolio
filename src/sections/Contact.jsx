@@ -3,7 +3,7 @@ import { motion, useReducedMotion } from "framer-motion"
 import { FaHeadset } from "react-icons/fa"
 import { FiUser, FiMail, FiPhone, FiMessageCircle, FiSend } from "react-icons/fi"
 
-export default function Contact({ theme = "dark" }) {
+export default function Contact({ theme = "light" }) {
   const isDark = theme === "dark"
   const reduceMotion = useReducedMotion()
 

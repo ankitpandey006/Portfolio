@@ -1,4 +1,4 @@
-export function Skeleton({ className = "", isDark = true }) {
+export function Skeleton({ className = "", isDark = false }) {
   return (
     <div
       className={[
@@ -10,7 +10,7 @@ export function Skeleton({ className = "", isDark = true }) {
   )
 }
 
-export function HeroSkeleton({ theme = "dark" }) {
+export function HeroSkeleton({ theme = "light" }) {
   const isDark = theme === "dark"
 
   return (
@@ -42,7 +42,7 @@ export function HeroSkeleton({ theme = "dark" }) {
   )
 }
 
-export function AboutSkeleton({ theme = "dark" }) {
+export function AboutSkeleton({ theme = "light" }) {
   const isDark = theme === "dark"
 
   return (
@@ -109,7 +109,7 @@ export function AboutSkeleton({ theme = "dark" }) {
   )
 }
 
-export function SkillsSkeleton({ theme = "dark" }) {
+export function SkillsSkeleton({ theme = "light" }) {
   const isDark = theme === "dark"
 
   return (
@@ -150,7 +150,7 @@ export function SkillsSkeleton({ theme = "dark" }) {
   )
 }
 
-export function EducationSkeleton({ theme = "dark" }) {
+export function EducationSkeleton({ theme = "light" }) {
   const isDark = theme === "dark"
 
   return (
@@ -192,7 +192,7 @@ export function EducationSkeleton({ theme = "dark" }) {
   )
 }
 
-export function ProjectSkeleton({ theme = "dark" }) {
+export function ProjectSkeleton({ theme = "light" }) {
   const isDark = theme === "dark"
 
   return (
@@ -231,7 +231,7 @@ export function ProjectSkeleton({ theme = "dark" }) {
   )
 }
 
-export function ExperienceSkeleton({ theme = "dark" }) {
+export function ExperienceSkeleton({ theme = "light" }) {
   const isDark = theme === "dark"
 
   return (
@@ -279,7 +279,7 @@ export function ExperienceSkeleton({ theme = "dark" }) {
   )
 }
 
-export function CertificationSkeleton({ theme = "dark" }) {
+export function CertificationSkeleton({ theme = "light" }) {
   const isDark = theme === "dark"
 
   return (
@@ -316,7 +316,7 @@ export function CertificationSkeleton({ theme = "dark" }) {
   )
 }
 
-export function ContactSkeleton({ theme = "dark" }) {
+export function ContactSkeleton({ theme = "light" }) {
   const isDark = theme === "dark"
 
   return (

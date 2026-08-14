@@ -20,7 +20,7 @@ const PROJECTS = [
   },
 ]
 
-export default function Work({ theme = "dark" }) {
+export default function Work({ theme = "light" }) {
   const isDark = theme === "dark"
   const reduceMotion = useReducedMotion()
 

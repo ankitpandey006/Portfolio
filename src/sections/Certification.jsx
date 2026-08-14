@@ -40,7 +40,7 @@ const CERTS = [
   },
 ]
 
-export default function Certification({ theme = "dark" }) {
+export default function Certification({ theme = "light" }) {
   const isDark = theme === "dark"
   const reduceMotion = useReducedMotion()
 

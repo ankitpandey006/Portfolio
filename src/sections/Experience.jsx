@@ -16,7 +16,7 @@ const EXPERIENCES = [
   },
 ]
 
-export default function Experience({ theme = "dark" }) {
+export default function Experience({ theme = "light" }) {
   const isDark = theme === "dark"
   const reduceMotion = useReducedMotion()
 

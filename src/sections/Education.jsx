@@ -29,7 +29,7 @@ const EDUCATION = [
   },
 ]
 
-export default function Education({ theme = "dark" }) {
+export default function Education({ theme = "light" }) {
   const isDark = theme === "dark"
   const reduceMotion = useReducedMotion()
 

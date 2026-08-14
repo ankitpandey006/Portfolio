@@ -18,7 +18,7 @@ import {
   SiCanva,
 } from "react-icons/si"
 
-export default function Skills({ theme = "dark" }) {
+export default function Skills({ theme = "light" }) {
   const isDark = theme === "dark"
   const reduceMotion = useReducedMotion()
   const textMuted = isDark ? "text-white/70" : "text-black/70"

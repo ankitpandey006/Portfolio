@@ -9,7 +9,7 @@ import {
   FaInstagram,
 } from "react-icons/fa"
 
-export default function Footer({ theme = "dark" }) {
+export default function Footer({ theme = "light" }) {
   const isDark = theme === "dark"
   const reduceMotion = useReducedMotion()
 
