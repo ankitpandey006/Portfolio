@@ -1,12 +1,11 @@
-import { useEffect, useMemo, useState } from "react"
+import { lazy, Suspense, useEffect, useMemo, useState } from "react"
 import { motion, useReducedMotion } from "framer-motion"
 import { SiLeetcode } from "react-icons/si"
 import { FaGithub, FaLinkedin, FaInstagram } from "react-icons/fa"
 
-
-// Particles
-import Particles from "@tsparticles/react"
-import { loadSlim } from "@tsparticles/slim"
+// Particles are lazy-loaded so their ~100KB chunk only downloads when
+// particles actually render (desktop, after the 900ms delay).
+const ParticlesLayer = lazy(() => import("../components/Particles"))
 
 // ✅ Typing Effect Hook
 function useTypeCycle(words, speed = 55, pause = 900) {
@@ -57,10 +56,6 @@ export default function Hero({ theme = "light" }) {
     900
   )
 
-  const particlesInit = async (engine) => {
-    await loadSlim(engine)
-  }
-
   const particlesOptions = useMemo(() => {
     const color = isDark ? "#ffffff" : "#111827"
 
@@ -92,14 +87,11 @@ export default function Hero({ theme = "light" }) {
         isDark ? "bg-[#0C1014] text-white" : "bg-white text-black"
       }`}
     >
-      {/* ✅ Particles */}
+      {/* ✅ Particles (lazy-loaded, desktop only) */}
       {showParticles && (
-        <Particles
-          id="tsparticles"
-          init={particlesInit}
-          options={particlesOptions}
-          className="absolute inset-0 -z-10"
-        />
+        <Suspense fallback={null}>
+          <ParticlesLayer options={particlesOptions} />
+        </Suspense>
       )}
 
       <div className="mx-auto max-w-4xl px-4 sm:px-6 pt-24 pb-14 w-full">

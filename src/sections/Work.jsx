@@ -2,8 +2,8 @@ import { motion, useReducedMotion } from "framer-motion"
 import { FaCode, FaExternalLinkAlt } from "react-icons/fa"
 
 // ✅ Import images from src/assets/projects
-import rpsImg from "../assets/projects/rps.png"
-import tttImg from "../assets/projects/ttt.png"
+import rpsImg from "../assets/projects/rps.webp"
+import tttImg from "../assets/projects/ttt.avif"
 
 const PROJECTS = [
   {

@@ -1,9 +1,9 @@
 import { motion, useReducedMotion } from "framer-motion"
 import { FaGraduationCap } from "react-icons/fa"
 
-import bceImg from "../assets/educations/bce.jpg"
-import class12Img from "../assets/educations/class12.jpg"
-import class10Img from "../assets/educations/class10.jpg"
+import bceImg from "../assets/educations/bce.webp"
+import class12Img from "../assets/educations/class12.webp"
+import class10Img from "../assets/educations/class10.webp"
 
 /* ===== EDUCATION DATA ===== */
 const EDUCATION = [
@@ -123,6 +123,7 @@ function EducationCard({ item, index, theme, reduceMotion }) {
             alt={item.institute}
             className="h-full w-full object-cover"
             loading="lazy"
+            decoding="async"
           />
         </div>
 

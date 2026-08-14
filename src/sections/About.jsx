@@ -2,7 +2,7 @@ import { useState } from "react"
 import { motion, useReducedMotion } from "framer-motion"
 import { FaUser, FaEnvelope, FaMapMarkerAlt, FaFileAlt } from "react-icons/fa"
 
-import profile from "../assets/profile.jpg"
+import profile from "../assets/profile.webp"
 
 const resumePdf = new URL("../assets/Ankit_Pandey_Resume.pdf", import.meta.url).href
 
